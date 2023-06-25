@@ -80,7 +80,7 @@ describe('JwtGuard', () => {
     } as ExecutionContext;
     jest
       .spyOn(authService, 'validateTokenSSO')
-      .mockRejectedValueOnce({ status: 401 });
+      .mockRejectedValueOnce({ response: { status: 401 } });
     await expect(sut.canActivate(mockExecutionContext)).rejects.toThrow(
       UnauthorizedException,
     );
@@ -100,7 +100,7 @@ describe('JwtGuard', () => {
     } as ExecutionContext;
     jest
       .spyOn(authService, 'validateTokenSSO')
-      .mockRejectedValueOnce({ status: 500 });
+      .mockRejectedValueOnce({ response: { status: 500 } });
     await expect(sut.canActivate(mockExecutionContext)).rejects.toThrow(
       BadGatewayException,
     );

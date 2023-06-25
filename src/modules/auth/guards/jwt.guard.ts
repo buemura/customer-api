@@ -23,7 +23,7 @@ export class JwtGuard implements CanActivate {
     try {
       await this.authService.validateTokenSSO(token);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         throw new UnauthorizedException();
       }
 
