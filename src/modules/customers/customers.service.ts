@@ -50,7 +50,7 @@ export class CustomersService {
 
     await this.cacheService.set({
       key: KEY_PREFIX.CUSTOMER + ':' + newCustomer.id,
-      value: JSON.stringify(newCustomer),
+      value: newCustomer,
     });
 
     return newCustomer;
