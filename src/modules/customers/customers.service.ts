@@ -16,5 +16,7 @@ export class CustomersService {
     if (!customer) {
       return null;
     }
+
+    return customer;
   }
 }
