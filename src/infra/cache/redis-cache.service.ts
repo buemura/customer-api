@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
 import { CacheService, CacheStructDto } from '@modules/cache/cache.service';
@@ -7,8 +8,11 @@ import { CacheService, CacheStructDto } from '@modules/cache/cache.service';
 export class RedisCacheService implements CacheService {
   private client: Redis;
 
-  constructor() {
-    this.client = new Redis();
+  constructor(private configService: ConfigService) {
+    this.client = new Redis({
+      host: this.configService.get<string>('REDIS_HOST'),
+      port: this.configService.get<number>('REDIS_PORT'),
+    });
   }
 
   async get<T>(key: string): Promise<T | null> {
