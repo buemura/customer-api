@@ -5,9 +5,10 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
+
 import { CacheUnavailableError } from '@shared/errors/cache-unavailable.error';
 import { SsoUnavailableError } from '@shared/errors/sso-unavailable.error';
-import { Response } from 'express';
 
 @Catch(Error, HttpException)
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -25,16 +26,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       });
     }
 
-    const status =
-      exception instanceof HttpException ? exception.getStatus() : 500;
-    const message =
-      exception instanceof HttpException
-        ? exception.message
-        : 'Internal Server Error';
+    if (exception instanceof HttpException) {
+      return response
+        .status(exception.getStatus())
+        .json(exception.getResponse());
+    }
 
-    response.status(status).json({
-      statusCode: status,
-      message,
+    return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error',
+      error: 'InternalServerError',
     });
   }
 }

@@ -7,7 +7,4 @@ export class BadGatewayResponseDto {
 
   @ApiProperty()
   message: string;
-
-  @ApiProperty({ default: 'Bad Gateway' })
-  error: string;
 }

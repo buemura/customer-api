@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadGatewayResponse,
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
@@ -27,6 +28,7 @@ import {
   NotFoundResponseDto,
   UnauthorizedResponseDto,
 } from '@shared/dtos';
+import { BadRequestResponseDto } from '@shared/dtos/bad-request-response.dto';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { CustomerResponseDto } from './dtos/customer-response.dto';
@@ -63,6 +65,7 @@ export class CustomersController {
   @Post()
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: CustomerResponseDto })
+  @ApiBadRequestResponse({ type: BadRequestResponseDto })
   async create(@Body() data: CreateCustomerDto): Promise<CustomerResponseDto> {
     return this.customersService.create(data);
   }
@@ -70,6 +73,7 @@ export class CustomersController {
   @Put(':id')
   @ApiBearerAuth()
   @ApiOkResponse({ type: CustomerResponseDto })
+  @ApiBadRequestResponse({ type: BadRequestResponseDto })
   @ApiNotFoundResponse({
     description: 'If the customer passed in id not exists.',
     type: NotFoundResponseDto,
