@@ -1,7 +1,15 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
+import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { CustomerResponseDto } from './dtos/customer-response.dto';
 
 @Controller('customers')
@@ -18,5 +26,12 @@ export class CustomersController {
     }
 
     return customer;
+  }
+
+  @Post()
+  @ApiBearerAuth()
+  @ApiResponse({ type: CustomerResponseDto })
+  async create(@Body() data: CreateCustomerDto): Promise<CustomerResponseDto> {
+    return this.customersService.create(data);
   }
 }
