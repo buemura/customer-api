@@ -3,6 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 
+import { AuthModule } from '@modules/auth/auth.module';
 import { CustomersController } from '../customers.controller';
 import { CustomersService } from '../customers.service';
 import { CreateCustomerDto } from '../dtos/create-customer.dto';
@@ -15,6 +16,7 @@ describe('CustomersController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [AuthModule],
       controllers: [CustomersController],
       providers: [
         CustomersService,

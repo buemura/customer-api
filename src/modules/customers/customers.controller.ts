@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -13,9 +14,12 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-import { NotFoundResponse } from '@shared/dtos/not-found-response.dto';
+import { JwtGuard } from '@modules/auth/guards/jwt.guard';
+import { NotFoundResponseDto } from '@shared/dtos/not-found-response.dto';
+import { UnauthorizedResponseDto } from '@shared/dtos/unauthorized-response.dto';
 import { ERROR_MESSAGE } from '@shared/errors/messages';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
@@ -23,6 +27,8 @@ import { CustomerResponseDto } from './dtos/customer-response.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 
 @ApiTags('Customers')
+@ApiUnauthorizedResponse({ type: UnauthorizedResponseDto })
+@UseGuards(JwtGuard)
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
@@ -32,7 +38,7 @@ export class CustomersController {
   @ApiOkResponse({ type: CustomerResponseDto })
   @ApiNotFoundResponse({
     description: 'If the customer passed in id not exists.',
-    type: NotFoundResponse,
+    type: NotFoundResponseDto,
   })
   async findById(@Param('id') id: string): Promise<CustomerResponseDto> {
     const customer = await this.customersService.findById(id);
@@ -55,7 +61,7 @@ export class CustomersController {
   @ApiOkResponse({ type: CustomerResponseDto })
   @ApiNotFoundResponse({
     description: 'If the customer passed in id not exists.',
-    type: NotFoundResponse,
+    type: NotFoundResponseDto,
   })
   async update(
     @Param('id') id: string,
