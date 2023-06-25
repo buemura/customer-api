@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { CacheRepository } from '@modules/cache/cache.repository';
 import { KEY_PREFIX } from '@shared/constants/redis';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
+import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { Customer } from './entities/customer.entity';
 
 @Injectable()
@@ -30,6 +31,26 @@ export class CustomersService {
     await this.cacheRepository.set({
       key: KEY_PREFIX.CUSTOMER + ':' + newCustomer.id,
       value: newCustomer,
+    });
+
+    return newCustomer;
+  }
+
+  async update(id: string, data: UpdateCustomerDto): Promise<Customer> {
+    const customer = await this.findById(id);
+    if (!customer) {
+      return null;
+    }
+
+    const newCustomer = new Customer({
+      id: customer.id,
+      document: data.document ?? customer.document,
+      name: data.name ?? customer.name,
+    });
+
+    await this.cacheRepository.set({
+      key: KEY_PREFIX.CUSTOMER + ':' + newCustomer.id,
+      value: JSON.stringify(newCustomer),
     });
 
     return newCustomer;
