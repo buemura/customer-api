@@ -1,9 +1,6 @@
-import {
-  CacheRepository,
-  CacheStructDto,
-} from '@modules/cache/cache.repository';
+import { CacheService, CacheStructDto } from '@modules/cache/cache.service';
 
-export class FakeRedisCacheRepository implements CacheRepository {
+export class FakeRedisCacheService implements CacheService {
   private data: CacheStructDto[] = [
     {
       key: 'customer:c0358342-caa7-46d5-b86b-f803899f71bc',

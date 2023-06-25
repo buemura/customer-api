@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { CacheRepository } from '@modules/cache/cache.repository';
+import { CacheService } from '@modules/cache/cache.service';
 import { KEY_PREFIX } from '@shared/constants/redis';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
@@ -8,10 +8,10 @@ import { Customer } from './entities/customer.entity';
 
 @Injectable()
 export class CustomersService {
-  constructor(private readonly cacheRepository: CacheRepository) {}
+  constructor(private readonly cacheService: CacheService) {}
 
   async findById(id: string): Promise<Customer> {
-    const customer = await this.cacheRepository.get<Customer>(
+    const customer = await this.cacheService.get<Customer>(
       KEY_PREFIX.CUSTOMER + ':' + id,
     );
 
@@ -28,7 +28,7 @@ export class CustomersService {
       name: data.name,
     });
 
-    await this.cacheRepository.set({
+    await this.cacheService.set({
       key: KEY_PREFIX.CUSTOMER + ':' + newCustomer.id,
       value: newCustomer,
     });
@@ -48,7 +48,7 @@ export class CustomersService {
       name: data.name ?? customer.name,
     });
 
-    await this.cacheRepository.set({
+    await this.cacheService.set({
       key: KEY_PREFIX.CUSTOMER + ':' + newCustomer.id,
       value: JSON.stringify(newCustomer),
     });

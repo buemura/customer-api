@@ -1,4 +1,4 @@
-import { CacheRepository } from '@modules/cache/cache.repository';
+import { CacheService } from '@modules/cache/cache.service';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
@@ -19,7 +19,7 @@ describe('CustomersController', () => {
       providers: [
         CustomersService,
         {
-          provide: CacheRepository,
+          provide: CacheService,
           useValue: () => null,
         },
       ],

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { CacheRepository } from '@modules/cache/cache.repository';
-import { FakeRedisCacheRepository } from 'test/__mocks__/fake-redis-cache.repository';
+import { CacheService } from '@modules/cache/cache.service';
+import { FakeRedisCacheService } from 'test/__mocks__/fake-redis-cache.service';
 import { CustomersService } from '../customers.service';
 import { UpdateCustomerDto } from '../dtos/update-customer.dto';
 
@@ -13,8 +13,8 @@ describe('CustomersService', () => {
       providers: [
         CustomersService,
         {
-          provide: CacheRepository,
-          useClass: FakeRedisCacheRepository,
+          provide: CacheService,
+          useClass: FakeRedisCacheService,
         },
       ],
     }).compile();

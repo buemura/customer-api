@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 
-import {
-  CacheRepository,
-  CacheStructDto,
-} from '@modules/cache/cache.repository';
+import { CacheService, CacheStructDto } from '@modules/cache/cache.service';
 
 @Injectable()
-export class RedisCacheService implements CacheRepository {
+export class RedisCacheService implements CacheService {
   private client: Redis;
 
   constructor() {

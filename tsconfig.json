@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     "paths": {
+      "@infra/*": ["src/infra/*"],
       "@modules/*": ["src/modules/*"],
       "@shared/*": ["src/shared/*"]
     }
