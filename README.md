@@ -1,2 +1,1 @@
-# stone-customer-api
-stone-customer-api
+# Stone Customer API
