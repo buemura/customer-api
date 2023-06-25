@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   GenerateTokenDto,
   GenerateTokenResponseDto,
@@ -8,7 +9,7 @@ import { HttpResponse } from '@shared/dtos/http-response.dto';
 
 export class FakeKeycloakSsoService implements SsoService {
   async generateToken(
-    input: GenerateTokenDto,
+    _input: GenerateTokenDto,
   ): Promise<HttpResponse<GenerateTokenResponseDto>> {
     return Promise.resolve({
       status: 200,

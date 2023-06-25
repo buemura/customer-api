@@ -1,5 +1,5 @@
 import { CacheService } from '@modules/cache/cache.service';
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 
@@ -84,6 +84,13 @@ describe('CustomersController', () => {
       await expect(
         sut.update(customerId, updateCustomerDto),
       ).rejects.toThrowError(NotFoundException);
+    });
+
+    it('should throw ConflictException when path id conflicts with body id', async () => {
+      jest.spyOn(customersService, 'update').mockResolvedValue(null);
+      await expect(sut.update('wrong', updateCustomerDto)).rejects.toThrowError(
+        ConflictException,
+      );
     });
 
     it('should update an existing customer', async () => {
