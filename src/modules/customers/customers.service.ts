@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { CacheService } from '@modules/cache/cache.service';
 import { KEY_PREFIX } from '@shared/constants/redis';
@@ -8,17 +8,24 @@ import { Customer } from './entities/customer.entity';
 
 @Injectable()
 export class CustomersService {
-  constructor(private readonly cacheService: CacheService) {}
+  private readonly logger: Logger;
+
+  constructor(private readonly cacheService: CacheService) {
+    this.logger = new Logger(CustomersService.name);
+  }
 
   async findById(id: string): Promise<Customer> {
+    this.logger.log('Getting customer by id: ' + id);
     const customer = await this.cacheService.get<Customer>(
       KEY_PREFIX.CUSTOMER + ':' + id,
     );
 
     if (!customer) {
+      this.logger.log('No customer found for id: ' + id);
       return null;
     }
 
+    this.logger.log('Found Customer for id: ' + id);
     return customer;
   }
 
@@ -33,6 +40,7 @@ export class CustomersService {
       value: newCustomer,
     });
 
+    this.logger.log('Customer created successfully');
     return newCustomer;
   }
 
@@ -53,6 +61,7 @@ export class CustomersService {
       value: newCustomer,
     });
 
+    this.logger.log('Customer updated successfully');
     return newCustomer;
   }
 }
