@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+
+  redis-client:
+    container_name: redis-client
+    image: redislabs/redisinsight:latest
+    ports:
+      - 8001:8001
