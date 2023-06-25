@@ -8,6 +8,7 @@ import {
 import { Request } from 'express';
 
 import { AuthService } from '../auth.service';
+import { ERROR_MESSAGE } from '../errors/message';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -27,7 +28,7 @@ export class JwtGuard implements CanActivate {
         throw new UnauthorizedException();
       }
 
-      throw new BadGatewayException();
+      throw new BadGatewayException(ERROR_MESSAGE.SSO_UNAVAILABLE);
     }
     return true;
   }
