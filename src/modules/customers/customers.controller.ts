@@ -1,5 +1,6 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Get,
   NotFoundException,
@@ -10,6 +11,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -18,13 +20,14 @@ import {
 } from '@nestjs/swagger';
 
 import { JwtGuard } from '@modules/auth/guards/jwt.guard';
+import { ConflictResponseDto } from '@shared/dtos/conflict-response.dto';
 import { NotFoundResponseDto } from '@shared/dtos/not-found-response.dto';
 import { UnauthorizedResponseDto } from '@shared/dtos/unauthorized-response.dto';
-import { ERROR_MESSAGE } from '@shared/errors/messages';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { CustomerResponseDto } from './dtos/customer-response.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
+import { ERROR_MESSAGE } from './errors/messages';
 
 @ApiTags('Customers')
 @ApiUnauthorizedResponse({ type: UnauthorizedResponseDto })
@@ -63,10 +66,19 @@ export class CustomersController {
     description: 'If the customer passed in id not exists.',
     type: NotFoundResponseDto,
   })
+  @ApiConflictResponse({
+    description:
+      'If the path patam Id conflicts with the id from request body.',
+    type: ConflictResponseDto,
+  })
   async update(
     @Param('id') id: string,
     @Body() data: UpdateCustomerDto,
   ): Promise<CustomerResponseDto> {
+    if (id !== data.id) {
+      throw new ConflictException(ERROR_MESSAGE.CUSTOMER_ID_CONFLICT);
+    }
+
     const customer = await this.customersService.update(id, data);
     if (!customer) {
       throw new NotFoundException(ERROR_MESSAGE.CUSTOMER_NOT_FOUND);

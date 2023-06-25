@@ -1,13 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class NotFoundResponseDto {
-  @ApiProperty({ default: HttpStatus.NOT_FOUND })
+export class ConflictResponseDto {
+  @ApiProperty({ default: HttpStatus.CONFLICT })
   statusCode: number;
 
   @ApiProperty()
   message: string;
 
-  @ApiProperty({ default: 'Not found' })
+  @ApiProperty({ default: 'Conflict' })
   error: string;
 }
