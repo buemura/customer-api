@@ -1,9 +1,14 @@
-import { SsoService } from '@modules/sso/sso.service';
 import { Test, TestingModule } from '@nestjs/testing';
+
+import { SsoService } from '@modules/sso/sso.service';
 import {
   mockGenerateTokenInput,
   mockGenerateTokenResponse,
 } from 'test/__mocks__/generate-token.mock';
+import {
+  mockValidateTokenInput,
+  mockValidateTokenResponse,
+} from 'test/__mocks__/validate-token.mock';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
 
@@ -45,24 +50,15 @@ describe('AuthController', () => {
 
   describe('getUserInfo', () => {
     it('should call validateTokenSSO and return the result', async () => {
-      const mockResult = {
-        status: 200,
-        data: {
-          sub: 'string',
-          email_verified: false,
-          preferred_username: 'string',
-        },
-      };
       const validateTokenSSOSpy = jest
         .spyOn(authService, 'validateTokenSSO')
-        .mockResolvedValueOnce(mockResult);
+        .mockResolvedValueOnce(mockValidateTokenResponse);
 
-      const mockBody = {
-        access_token: 'mock-access-token',
-      };
-      const result = await sut.getUserInfo(mockBody);
-      expect(validateTokenSSOSpy).toHaveBeenCalledWith(mockBody.access_token);
-      expect(result).toEqual(mockResult);
+      const result = await sut.getUserInfo(mockValidateTokenInput);
+      expect(validateTokenSSOSpy).toHaveBeenCalledWith(
+        mockValidateTokenInput.access_token,
+      );
+      expect(result).toEqual(mockValidateTokenResponse);
     });
   });
 });

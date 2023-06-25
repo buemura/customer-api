@@ -4,6 +4,10 @@ import {
   mockGenerateTokenInput,
   mockGenerateTokenResponse,
 } from 'test/__mocks__/generate-token.mock';
+import {
+  mockValidateTokenInput,
+  mockValidateTokenResponse,
+} from 'test/__mocks__/validate-token.mock';
 import { KeycloakSsoService } from './keycloak-sso.service';
 
 describe('KeycloakSsoService', () => {
@@ -34,25 +38,18 @@ describe('KeycloakSsoService', () => {
   });
 
   it('should validate a token successfully', async () => {
-    const mockResponse = {
-      status: 200,
-      data: {
-        sub: 'string',
-        email_verified: false,
-        preferred_username: 'string',
-      },
-    };
     const axiosGetSpy = jest
       .spyOn(axios, 'get')
-      .mockResolvedValueOnce(mockResponse);
+      .mockResolvedValueOnce(mockValidateTokenResponse);
 
-    const mockAccessToken = 'mock-access-token';
-    const result = await ssoService.validateToken(mockAccessToken);
+    const result = await ssoService.validateToken(
+      mockValidateTokenInput.access_token,
+    );
     expect(axiosGetSpy).toHaveBeenCalledWith(`${ssoUrl}/userinfo`, {
       headers: {
-        Authorization: 'Bearer ' + mockAccessToken,
+        Authorization: 'Bearer ' + mockValidateTokenInput.access_token,
       },
     });
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockValidateTokenResponse);
   });
 });
