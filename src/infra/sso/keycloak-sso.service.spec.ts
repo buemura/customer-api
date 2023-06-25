@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+import {
+  mockGenerateTokenInput,
+  mockGenerateTokenResponse,
+} from 'test/__mocks__/generate-token.mock';
 import { KeycloakSsoService } from './keycloak-sso.service';
 
 describe('KeycloakSsoService', () => {
@@ -11,39 +15,22 @@ describe('KeycloakSsoService', () => {
   });
 
   it('should generate a token successfully', async () => {
-    const mockResponse = {
-      status: 200,
-      data: {
-        access_token: 'string',
-        expires_in: 0,
-        refresh_expires_in: 0,
-        token_type: 'string',
-        id_token: 'string',
-        'not-before-policy': 0,
-        scope: 'string',
-      },
-    };
     const axiosPostSpy = jest
       .spyOn(axios, 'post')
-      .mockResolvedValueOnce(mockResponse);
+      .mockResolvedValueOnce(mockGenerateTokenResponse);
 
-    const mockInput = {
-      grant_type: 'string',
-      client_id: 'string',
-      client_secret: 'string',
-      username: 'string',
-      password: 'string',
-      scope: 'string',
-    };
-
-    const result = await ssoService.generateToken(mockInput);
-    expect(axiosPostSpy).toHaveBeenCalledWith(`${ssoUrl}/token`, mockInput, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const result = await ssoService.generateToken(mockGenerateTokenInput);
+    expect(axiosPostSpy).toHaveBeenCalledWith(
+      `${ssoUrl}/token`,
+      mockGenerateTokenInput,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
       },
-    });
+    );
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockGenerateTokenResponse);
   });
 
   it('should validate a token successfully', async () => {
