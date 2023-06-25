@@ -39,4 +39,13 @@ describe('CustomersService', () => {
       expect(customer.id).toEqual(id);
     });
   });
+
+  describe('create', () => {
+    it('should create a customer', async () => {
+      const result = await sut.create({ document: 99, name: 'jane doe' });
+      expect(result).toBeDefined();
+      expect(result.document).toEqual(99);
+      expect(result.name).toEqual('jane doe');
+    });
+  });
 });
