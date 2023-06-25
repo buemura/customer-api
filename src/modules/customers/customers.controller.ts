@@ -7,8 +7,9 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+
+import { ERROR_MESSAGE } from '@shared/errors/messages';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { CustomerResponseDto } from './dtos/customer-response.dto';
@@ -24,7 +25,7 @@ export class CustomersController {
   async findById(@Param('id') id: string): Promise<CustomerResponseDto> {
     const customer = await this.customersService.findById(id);
     if (!customer) {
-      throw new NotFoundException('Customer not found');
+      throw new NotFoundException(ERROR_MESSAGE.CUSTOMER_NOT_FOUND);
     }
 
     return customer;
@@ -46,7 +47,7 @@ export class CustomersController {
   ): Promise<CustomerResponseDto> {
     const customer = await this.customersService.update(id, data);
     if (!customer) {
-      throw new NotFoundException('Customer not found');
+      throw new NotFoundException(ERROR_MESSAGE.CUSTOMER_NOT_FOUND);
     }
 
     return customer;
