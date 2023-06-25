@@ -31,5 +31,12 @@ describe('CustomersService', () => {
       const customer = await sut.findById(id);
       expect(customer).toBeNull();
     });
+
+    it('should return the customer by Id', async () => {
+      const id = 'c0358342-caa7-46d5-b86b-f803899f71bc';
+      const customer = await sut.findById(id);
+      expect(customer).toBeDefined();
+      expect(customer.id).toEqual(id);
+    });
   });
 });
