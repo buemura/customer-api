@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadGatewayResponse,
   ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
@@ -20,9 +21,12 @@ import {
 } from '@nestjs/swagger';
 
 import { JwtGuard } from '@modules/auth/guards/jwt.guard';
-import { ConflictResponseDto } from '@shared/dtos/conflict-response.dto';
-import { NotFoundResponseDto } from '@shared/dtos/not-found-response.dto';
-import { UnauthorizedResponseDto } from '@shared/dtos/unauthorized-response.dto';
+import {
+  BadGatewayResponseDto,
+  ConflictResponseDto,
+  NotFoundResponseDto,
+  UnauthorizedResponseDto,
+} from '@shared/dtos';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { CustomerResponseDto } from './dtos/customer-response.dto';
@@ -31,6 +35,10 @@ import { ERROR_MESSAGE } from './errors/messages';
 
 @ApiTags('Customers')
 @ApiUnauthorizedResponse({ type: UnauthorizedResponseDto })
+@ApiBadGatewayResponse({
+  description: 'When SSO or Cache is unavailable.',
+  type: BadGatewayResponseDto,
+})
 @UseGuards(JwtGuard)
 @Controller('customers')
 export class CustomersController {
