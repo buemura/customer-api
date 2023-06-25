@@ -5,12 +5,14 @@ import {
   NotFoundException,
   Param,
   Post,
+  Put,
 } from '@nestjs/common';
 
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { CustomerResponseDto } from './dtos/customer-response.dto';
+import { UpdateCustomerDto } from './dtos/update-customer.dto';
 
 @Controller('customers')
 export class CustomersController {
@@ -33,5 +35,20 @@ export class CustomersController {
   @ApiResponse({ type: CustomerResponseDto })
   async create(@Body() data: CreateCustomerDto): Promise<CustomerResponseDto> {
     return this.customersService.create(data);
+  }
+
+  @Put(':id')
+  @ApiBearerAuth()
+  @ApiResponse({ type: CustomerResponseDto })
+  async update(
+    @Param('id') id: string,
+    @Body() data: UpdateCustomerDto,
+  ): Promise<CustomerResponseDto> {
+    const customer = await this.customersService.update(id, data);
+    if (!customer) {
+      throw new NotFoundException('Customer not found');
+    }
+
+    return customer;
   }
 }
