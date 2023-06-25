@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
 import { CacheService, CacheStructDto } from '@modules/cache/cache.service';
+import { CacheUnavailableError } from '@shared/errors/cache-unavailable.error';
 
 @Injectable()
 export class RedisCacheService implements CacheService {
@@ -16,15 +17,27 @@ export class RedisCacheService implements CacheService {
   }
 
   async get<T>(key: string): Promise<T | null> {
-    const value = await this.client.get(key);
-    return value ? JSON.parse(value) : null;
+    try {
+      const value = await this.client.get(key);
+      return value ? JSON.parse(value) : null;
+    } catch (error) {
+      throw new CacheUnavailableError();
+    }
   }
 
   async set(data: CacheStructDto): Promise<void> {
-    await this.client.set(data.key, JSON.stringify(data.value));
+    try {
+      await this.client.set(data.key, JSON.stringify(data.value));
+    } catch (error) {
+      throw new CacheUnavailableError();
+    }
   }
 
   async remove(key: string): Promise<void> {
-    await this.client.del(key);
+    try {
+      await this.client.del(key);
+    } catch (error) {
+      throw new CacheUnavailableError();
+    }
   }
 }
