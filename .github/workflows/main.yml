@@ -27,4 +27,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build Docker image
-        run: docker build -t customer-api-${{ github.head_ref }} .
+        run: docker build -t customer-api-${GITHUB_SHA::6} .
