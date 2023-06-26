@@ -1,14 +1,24 @@
 version: '3.8'
 
 services:
+  api:
+    container_name: customer-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      - redis
+
   redis:
-    container_name: redis
+    container_name: customer-redis
     image: redis:alpine
     ports:
       - 6379:6379
 
   redis-client:
-    container_name: redis-client
+    container_name: customer-redis-client
     image: redislabs/redisinsight:latest
     ports:
       - 8001:8001
