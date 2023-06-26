@@ -9,13 +9,16 @@ import {
   mockValidateTokenResponse,
 } from 'test/__mocks__/validate-token.mock';
 import { KeycloakSsoService } from './keycloak-sso.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('KeycloakSsoService', () => {
   const ssoUrl = process.env.SSO_URL;
+  let configService: ConfigService;
   let ssoService: KeycloakSsoService;
 
   beforeEach(() => {
-    ssoService = new KeycloakSsoService();
+    configService = new ConfigService();
+    ssoService = new KeycloakSsoService(configService);
   });
 
   it('should generate a token successfully', async () => {
