@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { SsoService } from '@modules/sso/sso.service';
+import { SsoService } from '@modules/auth/sso.service';
 import {
   mockGenerateTokenInput,
   mockGenerateTokenResponse,

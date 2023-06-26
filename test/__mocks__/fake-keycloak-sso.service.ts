@@ -3,8 +3,8 @@ import {
   GenerateTokenDto,
   GenerateTokenResponseDto,
   UserInfoDto,
-} from '@modules/sso/dtos';
-import { SsoService } from '@modules/sso/sso.service';
+} from '@modules/auth/dtos';
+import { SsoService } from '@modules/auth/sso.service';
 import { HttpResponse } from '@shared/dtos/http-response.dto';
 
 export class FakeKeycloakSsoService implements SsoService {

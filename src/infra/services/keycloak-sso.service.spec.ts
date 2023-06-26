@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { ConfigService } from '@nestjs/config';
 import {
   mockGenerateTokenInput,
   mockGenerateTokenResponse,
@@ -9,7 +10,6 @@ import {
   mockValidateTokenResponse,
 } from 'test/__mocks__/validate-token.mock';
 import { KeycloakSsoService } from './keycloak-sso.service';
-import { ConfigService } from '@nestjs/config';
 
 describe('KeycloakSsoService', () => {
   const ssoUrl = process.env.SSO_URL;

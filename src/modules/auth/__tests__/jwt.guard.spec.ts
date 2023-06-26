@@ -6,7 +6,7 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { Request } from 'express';
 
-import { SsoService } from '@modules/sso/sso.service';
+import { SsoService } from '@modules/auth/sso.service';
 import { mockValidateTokenResponse } from 'test/__mocks__/validate-token.mock';
 import { AuthService } from '../auth.service';
 import { JwtGuard } from '../guards/jwt.guard';

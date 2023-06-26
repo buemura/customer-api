@@ -5,10 +5,10 @@ import {
   GenerateTokenDto,
   GenerateTokenResponseDto,
   UserInfoDto,
-} from '@modules/sso/dtos';
-import { SsoService } from '@modules/sso/sso.service';
-import { HttpResponse } from '@shared/dtos/http-response.dto';
+} from '@modules/auth/dtos';
+import { SsoService } from '@modules/auth/sso.service';
 import { ConfigService } from '@nestjs/config';
+import { HttpResponse } from '@shared/dtos/http-response.dto';
 
 @Injectable()
 export class KeycloakSsoService implements SsoService {

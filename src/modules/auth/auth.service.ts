@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { SsoService } from '@modules/sso/sso.service';
+import { SsoService } from '@modules/auth/sso.service';
 import { HttpResponse } from '@shared/dtos/http-response.dto';
 import {
   GenerateTokenDto,

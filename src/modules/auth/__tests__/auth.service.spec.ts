@@ -1,4 +1,4 @@
-import { SsoService } from '@modules/sso/sso.service';
+import { SsoService } from '@modules/auth/sso.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { FakeKeycloakSsoService } from 'test/__mocks__/fake-keycloak-sso.service';
 import { AuthService } from '../auth.service';

@@ -1,12 +1,20 @@
-import { SsoModule } from '@modules/sso/sso.module';
+import { KeycloakSsoService } from '@infra/services/keycloak-sso.service';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { SsoService } from './sso.service';
 
 @Module({
-  imports: [SsoModule],
+  imports: [ConfigModule.forRoot()],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    {
+      provide: SsoService,
+      useClass: KeycloakSsoService,
+    },
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}
