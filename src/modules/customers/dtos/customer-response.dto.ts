@@ -9,4 +9,7 @@ export class CustomerResponseDto {
 
   @ApiProperty()
   name: string;
+
+  @ApiProperty()
+  createdAt: Date;
 }
