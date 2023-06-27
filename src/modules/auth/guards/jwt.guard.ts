@@ -1,5 +1,4 @@
 import {
-  BadGatewayException,
   CanActivate,
   ExecutionContext,
   Injectable,
@@ -8,7 +7,6 @@ import {
 import { Request } from 'express';
 
 import { AuthService } from '../auth.service';
-import { ERROR_MESSAGE } from '../errors/message';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -24,12 +22,9 @@ export class JwtGuard implements CanActivate {
     try {
       await this.authService.validateTokenSSO(token);
     } catch (error) {
-      if (error.response.status === 401) {
-        throw new UnauthorizedException();
-      }
-
-      throw new BadGatewayException(ERROR_MESSAGE.SSO_UNAVAILABLE);
+      throw error;
     }
+
     return true;
   }
 
