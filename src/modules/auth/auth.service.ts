@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
 import { SsoService } from '@modules/auth/sso.service';
-import { HttpResponse } from '@shared/dtos/http-response.dto';
 import {
   GenerateTokenDto,
   GenerateTokenResponseDto,
@@ -14,13 +13,11 @@ export class AuthService {
 
   async generateTokenSSO(
     data: GenerateTokenDto,
-  ): Promise<HttpResponse<GenerateTokenResponseDto>> {
+  ): Promise<GenerateTokenResponseDto> {
     return this.ssoService.generateToken(data);
   }
 
-  async validateTokenSSO(
-    accessToken: string,
-  ): Promise<HttpResponse<UserInfoDto>> {
+  async validateTokenSSO(accessToken: string): Promise<UserInfoDto> {
     return this.ssoService.validateToken(accessToken);
   }
 }

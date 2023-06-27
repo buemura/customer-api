@@ -1,4 +1,3 @@
-import { HttpResponse } from '@shared/dtos/http-response.dto';
 import {
   GenerateTokenDto,
   GenerateTokenResponseDto,
@@ -8,9 +7,7 @@ import {
 export abstract class SsoService {
   abstract generateToken(
     input: GenerateTokenDto,
-  ): Promise<HttpResponse<GenerateTokenResponseDto>>;
+  ): Promise<GenerateTokenResponseDto>;
 
-  abstract validateToken(
-    accessToken: string,
-  ): Promise<HttpResponse<UserInfoDto>>;
+  abstract validateToken(accessToken: string): Promise<UserInfoDto>;
 }

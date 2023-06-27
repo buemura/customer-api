@@ -29,13 +29,11 @@ describe('AuthService', () => {
       username: 'username',
       password: 'password',
     });
-    expect(result).toHaveProperty('status');
-    expect(result).toHaveProperty('data');
+    expect(result).toHaveProperty('access_token');
   });
 
   it('should validate a token successfully', async () => {
     const result = await sut.validateTokenSSO('access_token');
-    expect(result).toHaveProperty('status');
-    expect(result).toHaveProperty('data');
+    expect(result).toHaveProperty('sub');
   });
 });

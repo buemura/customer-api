@@ -3,10 +3,7 @@ export const mockValidateTokenInput = {
 };
 
 export const mockValidateTokenResponse = {
-  status: 200,
-  data: {
-    sub: 'string',
-    email_verified: false,
-    preferred_username: 'string',
-  },
+  sub: 'string',
+  email_verified: false,
+  preferred_username: 'string',
 };
