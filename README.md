@@ -30,17 +30,36 @@ git clone https://github.com/buemura/stone-customer-api.git
 npm install
 ```
 
-- Create a `.env` file in the root of the project. You can copy from `.env.example`.
-
 ## Run locally
 
-- To run the API in the local environment, use the command below:
+- Create a `.env.dev` file in the root of the project. You can copy from `.env.example`.
+
+- Run the command below to start redis database and to start the API in development mode:
 
 ```bash
-npm run docker:up
+npm run docker:up # to start redis
+npm run start:dev # to start the API in dev mode
 ```
 
-- This command will start the redis, as well as the API.
+## Run in production
+
+- Create a `.env.prod` file in the root of the project. You can copy from `.env.example` and change the `REDIS_HOST` as below if using a redis on a local container:
+
+```bash
+# For Windows/Mac
+REDIS_HOST = "host.docker.internal"
+# For Linux
+REDIS_HOST = "172.17.0.1"
+```
+
+- Run the command below to start redis database and to start the API in production mode:
+
+```bash
+npm run docker:up # to start redis
+docker build -t <image_name> . # to build the API docker image
+docker run -d -p 8080:8080 --name <container_name> --rm <image_name> # to run the API docker image
+docker logs -f <image_name> # to show the API logs
+```
 
 ## Usage
 
