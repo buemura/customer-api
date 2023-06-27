@@ -8,6 +8,7 @@
 - [Features](#features)
 - [Technologies Used](#technologies-used)
   - [Languages and Tools](#languages-and-tools)
+  - [Workflow Diagram](#workflow-diagram)
   - [Architecture Diagram](#architecture-diagram)
 - [Author](#author)
 
@@ -79,6 +80,10 @@ docker logs -f <image_name> # to show the API logs
 - Axios
 - TypeScript
 - Redis
+
+### Workflow Diagram
+
+![Workflow Diagram](docs/workflow.png)
 
 ### Architecture Diagram
 
