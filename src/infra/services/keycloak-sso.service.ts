@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 
 import {
@@ -6,51 +12,62 @@ import {
   GenerateTokenResponseDto,
   UserInfoDto,
 } from '@modules/auth/dtos';
+import { ERROR_MESSAGE } from '@modules/auth/errors/message';
 import { SsoService } from '@modules/auth/sso.service';
-import { ConfigService } from '@nestjs/config';
-import { HttpResponse } from '@shared/dtos/http-response.dto';
 
 @Injectable()
 export class KeycloakSsoService implements SsoService {
   constructor(private readonly configService: ConfigService) {}
 
-  async generateToken(
-    input: GenerateTokenDto,
-  ): Promise<HttpResponse<GenerateTokenResponseDto>> {
-    const { status, data } = await axios.post(
-      `${this.configService.get('SSO_URL')}/token`,
-      {
-        grant_type: this.configService.get('SSO_GRANT_TYPE'),
-        client_id: this.configService.get('SSO_CLIENT_ID'),
-        client_secret: this.configService.get('SSO_CLIENT_SECRET'),
-        scope: this.configService.get('SSO_SCOPE'),
-        username: input.username,
-        password: input.password,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      },
-    );
+  private validateHttpStatus(status: number) {
+    if (status === HttpStatus.UNAUTHORIZED) {
+      throw new UnauthorizedException();
+    }
 
-    return {
-      status,
-      data,
-    };
+    if (status > HttpStatus.INTERNAL_SERVER_ERROR) {
+      throw new BadGatewayException(ERROR_MESSAGE.SSO_UNAVAILABLE);
+    }
   }
 
-  async validateToken(accessToken: string): Promise<HttpResponse<UserInfoDto>> {
-    const { status, data } = await axios.get(
-      `${this.configService.get('SSO_URL')}/userinfo`,
-      {
-        headers: { Authorization: 'Bearer ' + accessToken },
-      },
-    );
+  async generateToken(
+    input: GenerateTokenDto,
+  ): Promise<GenerateTokenResponseDto> {
+    try {
+      const { data } = await axios.post(
+        `${this.configService.get('SSO_URL')}/token`,
+        {
+          grant_type: this.configService.get('SSO_GRANT_TYPE'),
+          client_id: this.configService.get('SSO_CLIENT_ID'),
+          client_secret: this.configService.get('SSO_CLIENT_SECRET'),
+          scope: this.configService.get('SSO_SCOPE'),
+          username: input.username,
+          password: input.password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
 
-    return {
-      status,
-      data,
-    };
+      return data;
+    } catch (error) {
+      this.validateHttpStatus(error.response.status);
+    }
+  }
+
+  async validateToken(accessToken: string): Promise<UserInfoDto> {
+    try {
+      const { data } = await axios.get(
+        `${this.configService.get('SSO_URL')}/userinfo`,
+        {
+          headers: { Authorization: 'Bearer ' + accessToken },
+        },
+      );
+
+      return data;
+    } catch (error) {
+      this.validateHttpStatus(error.response.status);
+    }
   }
 }
