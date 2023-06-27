@@ -7,7 +7,7 @@ import { CustomersModule } from './modules/customers/customers.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     AuthModule,
     CustomersModule,

@@ -26,7 +26,11 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT');
-  await app.listen(port, () => console.log('Customer API running...'));
+  await app.listen(port, () =>
+    console.log(
+      `Customer API running in ${process.env.NODE_ENV} environment...`,
+    ),
+  );
 }
 
 bootstrap();
