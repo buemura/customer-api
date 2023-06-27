@@ -1,7 +1,8 @@
-import { CacheService, CacheStructDto } from '@modules/cache/cache.service';
+import { CacheService } from '@modules/cache/cache.service';
+import { SetCacheDto } from '@modules/cache/dtos/set-cache.dto';
 
 export class FakeRedisCacheService implements CacheService {
-  private data: CacheStructDto[] = [
+  private data: SetCacheDto[] = [
     {
       key: 'customer:c0358342-caa7-46d5-b86b-f803899f71bc',
       value:
@@ -19,7 +20,7 @@ export class FakeRedisCacheService implements CacheService {
     return Promise.resolve(parsedResult);
   }
 
-  set(data: CacheStructDto): Promise<void> {
+  set(data: SetCacheDto): Promise<void> {
     this.data.push(data);
     return Promise.resolve();
   }

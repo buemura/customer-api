@@ -7,4 +7,7 @@ export class BadGatewayResponseDto {
 
   @ApiProperty()
   message: string;
+
+  @ApiProperty()
+  error: string;
 }

@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
-import { CacheService, CacheStructDto } from '@modules/cache/cache.service';
-import { CacheUnavailableError } from '@shared/errors/cache-unavailable.error';
+import { CacheService } from '@modules/cache/cache.service';
+import { SetCacheDto } from '@modules/cache/dtos/set-cache.dto';
+import { ERROR_MESSAGE } from '@modules/cache/errors/message';
 
 @Injectable()
 export class RedisCacheService implements CacheService {
@@ -21,15 +22,15 @@ export class RedisCacheService implements CacheService {
       const value = await this.client.get(key);
       return value ? JSON.parse(value) : null;
     } catch (error) {
-      throw new CacheUnavailableError();
+      throw new BadGatewayException(ERROR_MESSAGE.CACHE_UNAVAILABLE);
     }
   }
 
-  async set(data: CacheStructDto): Promise<void> {
+  async set(data: SetCacheDto): Promise<void> {
     try {
       await this.client.set(data.key, JSON.stringify(data.value));
     } catch (error) {
-      throw new CacheUnavailableError();
+      throw new BadGatewayException(ERROR_MESSAGE.CACHE_UNAVAILABLE);
     }
   }
 
@@ -37,7 +38,7 @@ export class RedisCacheService implements CacheService {
     try {
       await this.client.del(key);
     } catch (error) {
-      throw new CacheUnavailableError();
+      throw new BadGatewayException(ERROR_MESSAGE.CACHE_UNAVAILABLE);
     }
   }
 }
