@@ -2,6 +2,7 @@ import {
   BadGatewayException,
   HttpStatus,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -17,7 +18,11 @@ import { SsoService } from '@modules/auth/sso.service';
 
 @Injectable()
 export class KeycloakSsoService implements SsoService {
-  constructor(private readonly configService: ConfigService) {}
+  private readonly logger: Logger;
+
+  constructor(private readonly configService: ConfigService) {
+    this.logger = new Logger(KeycloakSsoService.name);
+  }
 
   private validateHttpStatus(status: number) {
     if (status === HttpStatus.UNAUTHORIZED) {
@@ -33,6 +38,8 @@ export class KeycloakSsoService implements SsoService {
     input: GenerateTokenDto,
   ): Promise<GenerateTokenResponseDto> {
     try {
+      this.logger.log('Generating accessToken');
+
       const { data } = await axios.post(
         `${this.configService.get('SSO_URL')}/token`,
         {
@@ -50,14 +57,18 @@ export class KeycloakSsoService implements SsoService {
         },
       );
 
+      this.logger.log('Successfully generated accessToken');
       return data;
     } catch (error) {
+      this.logger.log('Failed to generate accessToken');
       this.validateHttpStatus(error.response.status);
     }
   }
 
   async validateToken(accessToken: string): Promise<UserInfoDto> {
     try {
+      this.logger.log('Validating accessToken');
+
       const { data } = await axios.get(
         `${this.configService.get('SSO_URL')}/userinfo`,
         {
@@ -65,8 +76,10 @@ export class KeycloakSsoService implements SsoService {
         },
       );
 
+      this.logger.log('Successfully validated accessToken');
       return data;
     } catch (error) {
+      this.logger.log('Failed to validate accessToken');
       this.validateHttpStatus(error.response.status);
     }
   }
