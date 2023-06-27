@@ -8,7 +8,6 @@ import {
 import { Response } from 'express';
 
 import { CacheUnavailableError } from '@shared/errors/cache-unavailable.error';
-import { SsoUnavailableError } from '@shared/errors/sso-unavailable.error';
 
 @Catch(Error, HttpException)
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -16,10 +15,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    if (
-      exception instanceof CacheUnavailableError ||
-      exception instanceof SsoUnavailableError
-    ) {
+    if (exception instanceof CacheUnavailableError) {
       return response.status(HttpStatus.BAD_GATEWAY).json({
         statusCode: HttpStatus.BAD_GATEWAY,
         message: exception.message,
