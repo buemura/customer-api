@@ -2,11 +2,12 @@
 
 - [Project Overview](#project-overview)
 - [Installation](#installation)
-  - [Repositories](#repositories)
 - [Run locally](#run-locally)
+- [Run in production](#run-in-production)
 - [Usage](#usage)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
+  - [Languages and Tools](#languages-and-tools)
   - [Architecture Diagram](#architecture-diagram)
 - [Author](#author)
 
@@ -15,8 +16,6 @@
 This project is a customer API for Stone challenge. Where the main goal is to allow customers management.
 
 ## Installation
-
-### Repositories
 
 - Clone the repository:
 
@@ -73,6 +72,8 @@ docker logs -f <image_name> # to show the API logs
 
 ## Technologies Used
 
+### Languages and Tools
+
 - NodeJS
 - NestJS
 - Axios
@@ -88,3 +89,4 @@ docker logs -f <image_name> # to show the API logs
 Bruno Hideki Uemrua
 
 - [LinkedIn](https://www.linkedin.com/in/bruno-uemura/)
+- [Github](https://www.github.com/buemura)
